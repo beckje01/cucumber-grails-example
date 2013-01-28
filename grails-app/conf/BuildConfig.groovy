@@ -11,6 +11,9 @@ grails.project.source.level = 1.6
 //   run: [maxMemory:1024, minMemory:64, debug:false, maxPerm:256]
 //]
 
+def gebVersion = "0.7.2"
+def seleniumVersion = "2.21.0"
+
 grails.project.dependency.resolution = {
 	// inherit Grails' default dependencies
 	inherits("global") {
@@ -31,9 +34,22 @@ grails.project.dependency.resolution = {
 		mavenLocal()
 		mavenCentral()
 
+		mavenRepo "https://nexus.codehaus.org/content/repositories/snapshots"
+
 	}
 
 	dependencies {
+		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+			exclude "xml-apis"
+		}
+		test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+		test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
+
+		// You usually only need one of these, but this project uses both
+		test "org.codehaus.geb:geb-spock:$gebVersion"
+		test "org.codehaus.geb:geb-junit4:$gebVersion"
+
+		test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
 
 	}
 
@@ -45,6 +61,11 @@ grails.project.dependency.resolution = {
 		build ":tomcat:$grailsVersion"
 		compile ':cache:1.0.1'
 
+
+		test ":geb:$gebVersion"
+		test ":spock:0.7" {
+			exclude "spock-grails-support"
+		}
 
 
 		test ":cucumber:0.8.0"

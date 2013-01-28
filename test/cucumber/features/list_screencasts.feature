@@ -10,3 +10,10 @@ Feature: List Screencasts
 		And a screencast exist
 		When I go to the screencast catalog
 		Then I should see the screencast
+
+
+	Scenario: Guest viewing list of screen casts from firefox
+		Given I am a guest
+		And a screencast exist
+		When I navigate to the screencast catalog
+		Then My browser sees the screencast
